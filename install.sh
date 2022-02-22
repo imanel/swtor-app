@@ -9,10 +9,6 @@ RED='\033[0;31m'
 SCRIPT_DIR=$(cd "$(dirname "${BASH_SOURCE[0]}")" &> /dev/null && pwd)
 PREFIX_DIR="$SCRIPT_DIR/prefix"
 
-TOOLS_VERSION=$(xcode-select -p)
-TOOLS_INSTALLED="/Library/Developer/CommandLineTools"
-XCODE_CHECK=$(ls /Applications/Xcode.app) || : # set -e can cause the script to die here, so added || : to skip fail
-XCODE_INSTALLED="Contents"
 SWTOR_DOWNLOAD=http://www.swtor.com/download
 
 install_package_wget() {
@@ -123,14 +119,9 @@ install() {
   launch_swtor
 }
 
-# Check if Command Line Tools are installed followed by if Homebrew is installed
-# If either isn't installed, the script will quit
-if [ "$TOOLS_VERSION" = "$TOOLS_INSTALLED" ] || [ "$XCODE_CHECK" = "$XCODE_INSTALLED" ]; then
-  if [[ $(command -v brew) == "" ]]; then
-    echo -e "${RED}\tERROR: Homebrew not installed. Exiting.${NONE}"
-  else
-    install
-  fi
+# Check if Homebrew is installed
+if [[ $(command -v brew) == "" ]]; then
+  echo -e "${RED}\tERROR: Homebrew not installed. Exiting.${NONE}"
 else
-  echo -e "${RED}\tERROR: Command Line Tools not installed. Exiting.${NONE}"
+  install
 fi
