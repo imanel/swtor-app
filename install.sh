@@ -185,7 +185,7 @@ compile_wine() {
 
 check_if_wine_installed() {
   if [[ $CURRENT_VERSION_COMBINED -ge $MACOS_CATALINA ]]; then
-    if [[ $(wine32on64 --version) != "wine-6.0" ]]; then
+    if [[ $(wine --version) != "wine-6.0" ]]; then
       echo -e "${RED}\tERROR: Crossover Wine didn't get installed. Please check for errors in the output. Exiting.${NONE}"
       exit
     fi
@@ -195,7 +195,7 @@ check_if_wine_installed() {
 create_swtor_prefix() {
   echo -e "${PURPLE}\t(1/1) Creating "SWTOR On Mac" Wine prefix\n${NONE}"
   if [[ $CURRENT_VERSION_COMBINED -ge $MACOS_CATALINA ]]; then
-    WINEARCH=win32 WINEPREFIX="/Users/$CURRENT_USER/SWTOR On Mac" wine32on64 wineboot
+    WINEARCH=win32 WINEPREFIX="/Users/$CURRENT_USER/SWTOR On Mac" wine wineboot
   else
     WINEARCH=win64 WINEPREFIX="/Users/$CURRENT_USER/SWTOR On Mac" wine wineboot
   fi
@@ -281,7 +281,7 @@ move_swtor_app_to_desktop() {
 launch_swtor() {
   echo -e "${PURPLE}\tLaunching SWTOR_setup.exe...${NONE}"
   if [[ $CURRENT_VERSION_COMBINED -ge $MACOS_CATALINA ]]; then
-    WINEPREFIX="/Users/$CURRENT_USER/SWTOR On Mac" wine32on64 "/Users/$CURRENT_USER/SWTOR On Mac/drive_c/Program Files/SWTOR_setup.exe" >/dev/null 2>&1
+    WINEPREFIX="/Users/$CURRENT_USER/SWTOR On Mac" wine "/Users/$CURRENT_USER/SWTOR On Mac/drive_c/Program Files/SWTOR_setup.exe" >/dev/null 2>&1
   else
     WINEPREFIX="/Users/$CURRENT_USER/SWTOR On Mac" wine "/Users/$CURRENT_USER/SWTOR On Mac/drive_c/Program Files (x86)/SWTOR_setup.exe" >/dev/null 2>&1
     fi

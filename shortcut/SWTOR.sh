@@ -18,7 +18,7 @@ if [[ CURRENT_VERSION_COMBINED -ge $MACOS_CATALINA ]]; then
 	PREFIX_LOCATION=$(dirname "$(find ~/ -path \*drive_c/Program\ Files/Electronic\ Arts -print -quit 2>/dev/null| tail -1 | grep -o '.*/drive_c')")
 	PATH_TO_SWTOR_LAUNCHER="/drive_c/Program Files/Electronic Arts/BioWare/Star Wars - The Old Republic/"
 	cd "$PREFIX_LOCATION$PATH_TO_SWTOR_LAUNCHER" || PATH_TO_SWTOR_LAUNCHER="/drive_c/Program Files/Electronic Arts/BioWare/Star Wars-The Old Republic/"
-	WINEPREFIX=$PREFIX_LOCATION wine32on64 "$PREFIX_LOCATION$PATH_TO_SWTOR_LAUNCHER/launcher.exe"
+	WINEPREFIX=$PREFIX_LOCATION wine "$PREFIX_LOCATION$PATH_TO_SWTOR_LAUNCHER/launcher.exe"
 else
 	PREFIX_LOCATION=$(dirname "$(find ~/ -path \*drive_c/Program\ Files\ \(x86\)/Electronic\ Arts -print -quit 2>/dev/null| tail -1 | grep -o '.*/drive_c')")
 	PATH_TO_SWTOR_LAUNCHER="/drive_c/Program Files (x86)/Electronic Arts/BioWare/Star Wars - The Old Republic/"
