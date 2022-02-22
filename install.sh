@@ -55,134 +55,6 @@ install_package_winetricks() {
   brew install winetricks
 }
 
-# ---
-
-# Post-Catalina Package Management
-
-install_package_wget_catalina() {
-  echo -e "${PURPLE}\t(1/11) Installing wget${NONE}"
-  brew install wget
-}
-
-install_package_winetricks_catalina() {
-  echo -e "${PURPLE}\t(2/11) Installing Winetricks\n${NONE}"
-  brew install winetricks
-}
-
-install_package_cmake() {
-  echo -e "${PURPLE}\t(3/11) Installing CMake\n${NONE}"
-  brew install cmake
-}
-
-install_package_gcc() {
-  echo -e "${PURPLE}\t(4/11) Installing GCC\n${NONE}"
-  brew install gcc
-}
-
-install_package_bison() {
-  echo -e "${PURPLE}\t(5/11) Installing Bison\n${NONE}"
-  brew install bison
-  # Homebrew packages in Apple Silicon are installed under /opt/homebrew/opt/
-  if [[ $CPU_ARCHITECTURE == *"M1"* ]]; then
-    PATH="/opt/homebrew/opt/bison/bin:$PATH"
-  else
-    PATH="$(brew --prefix bison)/bin:$PATH"
-  fi
-  export PATH
-}
-
-install_package_xquartz() {
-  echo -e "${PURPLE}\t(6/11) Installing XQuartz\n${NONE}"
-  brew install --cask xquartz
-}
-
-install_package_flex() {
-  echo -e "${PURPLE}\t(7/11) Installing Flex\n${NONE}"
-  brew install flex
-}
-
-install_package_mingw_w64() {
-  echo -e "${PURPLE}\t(8/11) Installing Mingw-w64\n${NONE}"
-  brew install mingw-w64
-}
-
-install_package_pkg_config() {
-  echo -e "${PURPLE}\t(9/11) Installing pkg-config\n${NONE}"
-  brew install pkg-config
-}
-
-install_package_freetype() {
-  echo -e "${PURPLE}\t(10/11) Installing FreeType\n${NONE}"
-  brew install freetype
-}
-
-install_package_gnutls() {
-  echo -e "${PURPLE}\t(11/11) Installing GnuTLS\n${NONE}"
-  brew install gnutls
-}
-
-# ---
-
-download_crossover_21_patched() {
-  echo -e "${PURPLE}\t(1/5) Downloading patched CrossOver 21.1.0 from https://github.com/AgentRG/swtor_on_mac${NONE}"
-  wget $CROSSOVER_LINK
-}
-
-unpack_crossover_21_tar() {
-  echo -e "${PURPLE}\t(2/5) Unpacking and deleting $CROSSOVER_TAR${NONE}"
-  tar -jxvf $CROSSOVER_TAR
-  rm -f $CROSSOVER_TAR
-  cd "/Users/$CURRENT_USER/swtor_tmp/sources/" || exit
-}
-
-compile_llvm() {
-  echo -e "${PURPLE}\t(3/5) Compile LLVM ${NONE}"
-  DIR=$(pwd)
-  export DIR
-  cd clang/llvm
-  mkdir build || (rm -r build && mkdir build)
-  cd build
-  cmake ../
-  make
-  cd bin
-  PATH="$(pwd):$PATH"
-  export PATH
-  cd "$DIR"
-}
-
-compile_clang() {
-  echo -e "${PURPLE}\t(4/5) Compile Clang${NONE}"
-  DIR=$(pwd)
-  export DIR
-  cd clang/clang
-  mkdir build || (rm -r build && mkdir build)
-  cd build
-  cmake ../
-  make
-  cd bin
-  PATH="$(pwd):$PATH"
-  export PATH
-  cd "$DIR"
-}
-
-compile_wine() {
-  echo -e "${PURPLE}\t(5/5) Compile and install Wine${NONE}"
-  DIR=$(pwd)
-  export DIR
-  cd wine
-  PATH="$(pwd):$PATH"
-  export PATH
-  export MACOSX_DEPLOYMENT_TARGET=10.14
-  CC="clang" CXX="clang++" MACOSX_DEPLOYMENT_TARGET=10.14 ./configure --enable-win32on64 -disable-winedbg --without-x \
-  --disable-tests --disable-mscms --without-sane --without-alsa --without-capi --without-dbus --without-inotify \
-  --without-oss --without-pulse --without-udev --without-v4l2 --without-cms --without-gstreamer --without-gsm \
-  --without-gphoto --with-mingw --without-krb5 --without-vkd3d --without-vulkan --disable-vulkan_1 --disable-winevulkan
-  make
-  echo -e "${PURPLE}\tMoving Wine binaries to /usr/local/bin/ (password may be required)${NONE}"
-  sudo make install-lib
-  cd "$DIR"
-}
-
 check_if_wine_installed() {
   if [[ $CURRENT_VERSION_COMBINED -ge $MACOS_CATALINA ]]; then
     if [[ $(wine --version) != "wine-6.0" ]]; then
@@ -364,34 +236,11 @@ install_post_catalina() {
   echo -e "${PURPLE}\tStep 2: Install Homebrew packages${NONE}"
   echo -e "${PURPLE}\t‾ ‾ ‾ ‾ ‾ ‾ ‾ ‾ ‾ ‾ ‾ ‾ ‾ ‾ ‾ ‾ ‾ ${NONE}"
 
-  # install_package_wget_catalina
-  # install_package_winetricks_catalina
-  # install_package_cmake
-  # install_package_gcc
-  # install_package_bison
-  # install_package_xquartz
-  # install_package_flex
-  # install_package_mingw_w64
-  # install_package_pkg_config
-  # install_package_freetype
-  # install_package_gnutls
-
   install_package_wget
   tap_into_gcenx_brew
   install_package_wine_stable
   check_if_wine_installed
   install_package_winetricks
-
-  # echo -e "${PURPLE}\tStep 3: Download and compile patched Wine CrossOver 21${NONE}"
-  # echo -e "${PURPLE}\t‾ ‾ ‾ ‾ ‾ ‾ ‾ ‾ ‾ ‾ ‾ ‾ ‾ ‾ ‾ ‾ ‾ ${NONE}"
-
-  # cd "/Users/$CURRENT_USER/swtor_tmp/" || exit
-  # download_crossover_21_patched
-  # unpack_crossover_21_tar
-  # compile_llvm
-  # compile_clang
-  # compile_wine
-  # check_if_wine_installed
 
   echo -e "${PURPLE}\tStep 4: Create custom Wine prefix${NONE}"
   echo -e "${PURPLE}\t‾ ‾ ‾ ‾ ‾ ‾ ‾ ‾ ‾ ‾ ‾ ‾ ‾ ‾ ‾ ‾ ‾ ${NONE}"
