@@ -5,34 +5,18 @@ set -e
 NONE='\033[00m'
 PURPLE='\033[01;35m'
 RED='\033[0;31m'
-MACOS_HIGH_SIERRA=1013
-MACOS_CATALINA=1015
-CURRENT_VERSION=$(sw_vers -productVersion | awk '{print $1}' | sed "s:.[[:digit:]]*.$::g")
 TOOLS_VERSION=$(xcode-select -p)
 TOOLS_INSTALLED="/Library/Developer/CommandLineTools"
 XCODE_CHECK=$(ls /Applications/Xcode.app) || : # set -e can cause the script to die here, so added || : to skip fail
 XCODE_INSTALLED="Contents"
 CURRENT_USER=$(whoami)
-CROSSOVER_TAR=src-crossover-wine-clang-0.0.3.tar.bz2
-CROSSOVER_LINK=https://github.com/AgentRG/swtor_on_mac/releases/download/6.0-wine-crossover/$CROSSOVER_TAR
 SWTOR_CUSTOM_SHORTCUT_LINK=https://github.com/AgentRG/swtor_on_mac/raw/master/SWTOR.zip
 SWTOR_DOWNLOAD=http://www.swtor.com/download
-CPU_ARCHITECTURE=$(sysctl -n machdep.cpu.brand_string)
-
-if [[ $(echo "${CURRENT_VERSION}" | cut -d"." -f2 | wc -c) -eq 2 ]]; then
-  CURRENT_VERSION_COMBINED=$(echo "${CURRENT_VERSION}" | cut -d"." -f1)0$(echo "${CURRENT_VERSION}" | cut -d"." -f2)
-  export CURRENT_VERSION_COMBINED
-else
-	CURRENT_VERSION_COMBINED=$(echo "${CURRENT_VERSION}" | cut -d"." -f1)$(echo "${CURRENT_VERSION}" | cut -d"." -f2)
-	export CURRENT_VERSION_COMBINED
-fi
 
 create_temporary_downloads_folder() {
   echo -e "${PURPLE}\t(1/1) Creating temporary downloads folder\n${NONE}"
   mkdir /Users/"$CURRENT_USER"/swtor_tmp || :
 }
-
-# Pre-Catalina Package Management
 
 install_package_wget() {
   echo -e "${PURPLE}\t(1/4) Installing wget${NONE}"
@@ -55,22 +39,9 @@ install_package_winetricks() {
   brew install winetricks
 }
 
-check_if_wine_installed() {
-  if [[ $CURRENT_VERSION_COMBINED -ge $MACOS_CATALINA ]]; then
-    if [[ $(wine --version) != "wine-6.0" ]]; then
-      echo -e "${RED}\tERROR: Crossover Wine didn't get installed. Please check for errors in the output. Exiting.${NONE}"
-      exit
-    fi
-  fi
-}
-
 create_swtor_prefix() {
   echo -e "${PURPLE}\t(1/1) Creating "SWTOR On Mac" Wine prefix\n${NONE}"
-  if [[ $CURRENT_VERSION_COMBINED -ge $MACOS_CATALINA ]]; then
-    WINEARCH=win32 WINEPREFIX="/Users/$CURRENT_USER/SWTOR On Mac" wine wineboot
-  else
-    WINEARCH=win64 WINEPREFIX="/Users/$CURRENT_USER/SWTOR On Mac" wine wineboot
-  fi
+  WINEARCH=win32 WINEPREFIX="/Users/$CURRENT_USER/SWTOR On Mac" wine wineboot
 }
 
 install_dll_vcrun2008() {
@@ -115,20 +86,12 @@ download_swtor_shortcut_zip() {
 
 move_swtor_setup() {
   echo -e "${PURPLE}\t(1/2) Moving SWTOR_setup.exe to prefix folder${NONE}"
-  if [[ $CURRENT_VERSION_COMBINED -ge $MACOS_CATALINA ]]; then
-    mv "/Users/$CURRENT_USER/swtor_tmp/SWTOR_setup.exe" "/Users/$CURRENT_USER/SWTOR On Mac/drive_c/Program Files/"
-  else
-    mv "/Users/$CURRENT_USER/swtor_tmp/SWTOR_setup.exe" "/Users/$CURRENT_USER/SWTOR On Mac/drive_c/Program Files (x86)/"
-  fi
+  mv "/Users/$CURRENT_USER/swtor_tmp/SWTOR_setup.exe" "/Users/$CURRENT_USER/SWTOR On Mac/drive_c/Program Files/"
 }
 
 move_swtor_shortcut_zip() {
   echo -e "${PURPLE}\t(2/2) Moving SWTOR.zip to prefix folder\n${NONE}"
-  if [[ $CURRENT_VERSION_COMBINED -ge $MACOS_CATALINA ]]; then
-    mv "/Users/$CURRENT_USER/swtor_tmp/SWTOR.zip" "/Users/$CURRENT_USER/SWTOR On Mac/drive_c/Program Files/"
-  else
-    mv "/Users/$CURRENT_USER/swtor_tmp/SWTOR.zip" "/Users/$CURRENT_USER/SWTOR On Mac/drive_c/Program Files (x86)/"
-  fi
+  mv "/Users/$CURRENT_USER/swtor_tmp/SWTOR.zip" "/Users/$CURRENT_USER/SWTOR On Mac/drive_c/Program Files/"
 }
 
 delete_temporary_downloads_folder() {
@@ -138,11 +101,7 @@ delete_temporary_downloads_folder() {
 
 unzip_swtor_app() {
   echo -e "${PURPLE}\t(1/2) Unzip SWTOR.zip\n${NONE}"
-  if [[ $CURRENT_VERSION_COMBINED -ge $MACOS_CATALINA ]]; then
-      unzip "/Users/$CURRENT_USER/SWTOR On Mac/drive_c/Program Files/SWTOR.zip"
-  else
-      unzip "/Users/$CURRENT_USER/SWTOR On Mac/drive_c/Program Files (x86)/SWTOR.zip"
-  fi
+  unzip "/Users/$CURRENT_USER/SWTOR On Mac/drive_c/Program Files/SWTOR.zip"
 }
 
 move_swtor_app_to_desktop() {
@@ -152,15 +111,11 @@ move_swtor_app_to_desktop() {
 
 launch_swtor() {
   echo -e "${PURPLE}\tLaunching SWTOR_setup.exe...${NONE}"
-  if [[ $CURRENT_VERSION_COMBINED -ge $MACOS_CATALINA ]]; then
-    WINEPREFIX="/Users/$CURRENT_USER/SWTOR On Mac" wine "/Users/$CURRENT_USER/SWTOR On Mac/drive_c/Program Files/SWTOR_setup.exe" >/dev/null 2>&1
-  else
-    WINEPREFIX="/Users/$CURRENT_USER/SWTOR On Mac" wine "/Users/$CURRENT_USER/SWTOR On Mac/drive_c/Program Files (x86)/SWTOR_setup.exe" >/dev/null 2>&1
-    fi
+  WINEPREFIX="/Users/$CURRENT_USER/SWTOR On Mac" wine "/Users/$CURRENT_USER/SWTOR On Mac/drive_c/Program Files/SWTOR_setup.exe" >/dev/null 2>&1
 }
 
-# Main function that installs Homebrew packages and SWTOR for macOS's before Catalina
-install_pre_catalina() {
+# Main function that installs Homebrew packages and SWTOR
+install() {
 
   echo -e "${PURPLE}\tStep 1: Create temporary downloads folder${NONE}"
   echo -e "${PURPLE}\t‾ ‾ ‾ ‾ ‾ ‾ ‾ ‾ ‾ ‾ ‾ ‾ ‾ ‾ ‾ ‾ ‾ ‾ ‾ ‾ ‾${NONE}"
@@ -173,73 +128,6 @@ install_pre_catalina() {
   install_package_wget
   tap_into_gcenx_brew
   install_package_wine_stable
-  check_if_wine_installed
-  install_package_winetricks
-
-  echo -e "${PURPLE}\tStep 3: Create custom Wine prefix${NONE}"
-  echo -e "${PURPLE}\t‾ ‾ ‾ ‾ ‾ ‾ ‾ ‾ ‾ ‾ ‾ ‾ ‾ ‾ ‾ ‾ ‾ ${NONE}"
-
-  create_swtor_prefix
-
-  echo -e "${PURPLE}\tStep 4: Install DLLs to prefix${NONE}"
-  echo -e "${PURPLE}\t‾ ‾ ‾ ‾ ‾ ‾ ‾ ‾ ‾ ‾ ‾ ‾ ‾ ‾ ‾ ${NONE}"
-
-  install_dll_vcrun2008
-  install_dll_crypt32
-  install_dll_d3dx9_36
-
-  echo -e "${PURPLE}\tStep 5: Change prefix settings${NONE}"
-  echo -e "${PURPLE}\t‾ ‾ ‾ ‾ ‾ ‾ ‾ ‾ ‾ ‾ ‾ ‾ ‾ ‾ ‾ ${NONE}"
-
-  set_vram
-  switch_windows_version
-  switch_all_dlls_to_builtin
-
-  echo -e "${PURPLE}\tStep 6: Download SWTOR executable${NONE}"
-  echo -e "${PURPLE}\t‾ ‾ ‾ ‾ ‾ ‾ ‾ ‾ ‾ ‾ ‾ ‾ ‾ ‾ ‾ ‾ ‾ ‾ ‾${NONE}"
-
-  cd "/Users/$CURRENT_USER/swtor_tmp/" || exit
-  download_swtor
-  download_swtor_shortcut_zip
-  cd "/Users/$CURRENT_USER/" || exit
-
-  echo -e "${PURPLE}\tStep 7: Move executables and icon and move to prefix folder${NONE}"
-  echo -e "${PURPLE}\t‾ ‾ ‾ ‾ ‾ ‾ ‾ ‾ ‾ ‾ ‾ ‾ ‾ ‾ ‾ ‾ ‾ ‾ ‾ ‾ ‾ ‾ ‾ ‾ ‾ ‾ ‾ ‾ ‾ ‾${NONE}"
-
-  move_swtor_setup
-  move_swtor_shortcut_zip
-
-  echo -e "${PURPLE}\tStep 8: Delete temporary downloads folder${NONE}"
-  echo -e "${PURPLE}\t‾ ‾ ‾ ‾ ‾ ‾ ‾ ‾ ‾ ‾ ‾ ‾ ‾ ‾ ‾ ‾ ‾ ‾ ‾ ‾ ‾${NONE}"
-
-  delete_temporary_downloads_folder
-
-  echo -e "${PURPLE}\tStep 9: Unzip SWTOR.zip and move application to Desktop${NONE}"
-  echo -e "${PURPLE}\t‾ ‾ ‾ ‾ ‾ ‾ ‾ ‾ ‾ ‾ ‾ ‾ ‾ ‾ ‾ ‾ ‾ ‾ ‾ ‾ ‾ ‾ ‾ ‾ ‾ ‾ ‾ ‾${NONE}"
-
-  unzip_swtor_app
-  move_swtor_app_to_desktop
-
-  echo -e "${PURPLE}\tSWTOR On Mac Installation Finished Successfully!${NONE}"
-
-  launch_swtor
-}
-
-# Main function that installs Homebrew packages and SWTOR for macOS's after Catalina
-install_post_catalina() {
-
-  echo -e "${PURPLE}\tStep 1: Create temporary downloads folder${NONE}"
-  echo -e "${PURPLE}\t‾ ‾ ‾ ‾ ‾ ‾ ‾ ‾ ‾ ‾ ‾ ‾ ‾ ‾ ‾ ‾ ‾ ‾ ‾ ‾ ‾${NONE}"
-
-  create_temporary_downloads_folder
-
-  echo -e "${PURPLE}\tStep 2: Install Homebrew packages${NONE}"
-  echo -e "${PURPLE}\t‾ ‾ ‾ ‾ ‾ ‾ ‾ ‾ ‾ ‾ ‾ ‾ ‾ ‾ ‾ ‾ ‾ ${NONE}"
-
-  install_package_wget
-  tap_into_gcenx_brew
-  install_package_wine_stable
-  check_if_wine_installed
   install_package_winetricks
 
   echo -e "${PURPLE}\tStep 4: Create custom Wine prefix${NONE}"
@@ -300,11 +188,7 @@ if [ "$TOOLS_VERSION" = "$TOOLS_INSTALLED" ] || [ "$XCODE_CHECK" = "$XCODE_INSTA
   if [[ $(command -v brew) == "" ]]; then
     echo -e "${RED}\tERROR: Homebrew not installed. Exiting.${NONE}"
   else
-    if [[ $CURRENT_VERSION_COMBINED -ge $MACOS_CATALINA ]]; then
-      install_post_catalina
-    else
-      install_pre_catalina
-    fi
+    install
   fi
 else
   echo -e "${RED}\tERROR: Command Line Tools not installed. Exiting.${NONE}"
