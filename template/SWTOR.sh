@@ -1,7 +1,18 @@
 #!/usr/bin/env arch -x86_64 bash
 
 SCRIPT_DIR=$(cd "$(dirname "${BASH_SOURCE[0]}")" &> /dev/null && pwd)
-PREFIX_DIR="$SCRIPT_DIR/../Resources/prefix"
+RESOURCES_DIR="$(dirname "$SCRIPT_DIR")/Resources"
+
+PREFIX_DIR="$RESOURCES_DIR/prefix"
 SWTOR_LAUNCHER_DIR="$PREFIX_DIR/drive_c/Program Files/Electronic Arts/BioWare/Star Wars - The Old Republic/"
 
-WINEPREFIX=$PREFIX_DIR /opt/homebrew/bin/wine "$SWTOR_LAUNCHER_DIR/launcher.exe" > ~/Library/Logs/SWTOR.log 2>&1
+STANDALONE_WINE="$RESOURCES_DIR/wine/bin/wine"
+HOMEBREW_WINE="/opt/homebrew/bin/wine"
+
+if [[ -f "$STANDALONE_WINE" ]]; then
+  WINE="$STANDALONE_WINE"
+else
+  WINE="$HOMEBREW_WINE"
+fi
+
+WINEPREFIX=$PREFIX_DIR $WINE "$SWTOR_LAUNCHER_DIR/launcher.exe" > ~/Library/Logs/SWTOR.log 2>&1

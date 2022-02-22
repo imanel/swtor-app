@@ -38,6 +38,11 @@ compress_app() {
   tar -cvzf "$DIST_DIR/$file_name" -C "$DIST_DIR" --gid 0 --uid 0 "SWTOR.app"
 }
 
+copy_wine_to_app() {
+  log "->\Copying wine from Wine Crossover to SWTOR.app"
+  cp -Rv "/Applications/Wine Crossover.app/Contents/Resources/wine" "$APP_DIR/Contents/Resources/"
+}
+
 move_back_prefix_dir() {
   log "->\tMoving prefix dir back to original place"
   mv -v "$APP_DIR/Contents/Resources/prefix" "$PREFIX_DIR"
@@ -68,6 +73,13 @@ package() {
   log "‾ ‾ ‾ ‾ ‾ ‾ ‾ ‾ ‾ ‾ ‾ ‾ ‾ ‾ ‾ ‾ ‾ ‾"
 
   compress_app "SWTOR-light"
+
+  log "_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _"
+  log "Step 4: Prepare SWTOR-standalone package"
+  log "‾ ‾ ‾ ‾ ‾ ‾ ‾ ‾ ‾ ‾ ‾ ‾ ‾ ‾ ‾ ‾ ‾ ‾ ‾ ‾ ‾"
+
+  copy_wine_to_app
+  compress_app "SWTOR-standalone"
 
   log "_ _ _ _ _ _ _ _"
   log "Step 9: Cleanup"
