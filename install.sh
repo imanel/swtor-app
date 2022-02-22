@@ -39,15 +39,15 @@ install_package_wget() {
   brew install wget
 }
 
-tap_into_agentrg_brew() {
-  echo -e "${PURPLE}\t(2/4) Tap into AgentRG/homebrew-wine${NONE}"
-  brew tap agentrg/homebrew-wine
+tap_into_gcenx_brew() {
+  echo -e "${PURPLE}\t(2/4) Tap into Gcenx/homebrew-wine${NONE}"
+  brew tap Gcenx/homebrew-wine
 }
 
 install_package_wine_stable() {
   echo -e "${PURPLE}\t(3/4) Installing latest Wine version${NONE}"
   brew update
-  brew install --cask --no-quarantine agentrg-wine-stable
+  brew install --cask --no-quarantine wine-crossover
 }
 
 install_package_winetricks() {
@@ -299,7 +299,7 @@ install_pre_catalina() {
   echo -e "${PURPLE}\t‾ ‾ ‾ ‾ ‾ ‾ ‾ ‾ ‾ ‾ ‾ ‾ ‾ ‾ ‾ ‾ ‾ ${NONE}"
 
   install_package_wget
-  tap_into_agentrg_brew
+  tap_into_gcenx_brew
   install_package_wine_stable
   check_if_wine_installed
   install_package_winetricks
