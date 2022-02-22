@@ -364,28 +364,34 @@ install_post_catalina() {
   echo -e "${PURPLE}\tStep 2: Install Homebrew packages${NONE}"
   echo -e "${PURPLE}\t‾ ‾ ‾ ‾ ‾ ‾ ‾ ‾ ‾ ‾ ‾ ‾ ‾ ‾ ‾ ‾ ‾ ${NONE}"
 
-  install_package_wget_catalina
-  install_package_winetricks_catalina
-  install_package_cmake
-  install_package_gcc
-  install_package_bison
-  install_package_xquartz
-  install_package_flex
-  install_package_mingw_w64
-  install_package_pkg_config
-  install_package_freetype
-  install_package_gnutls
+  # install_package_wget_catalina
+  # install_package_winetricks_catalina
+  # install_package_cmake
+  # install_package_gcc
+  # install_package_bison
+  # install_package_xquartz
+  # install_package_flex
+  # install_package_mingw_w64
+  # install_package_pkg_config
+  # install_package_freetype
+  # install_package_gnutls
 
-  echo -e "${PURPLE}\tStep 3: Download and compile patched Wine CrossOver 21${NONE}"
-  echo -e "${PURPLE}\t‾ ‾ ‾ ‾ ‾ ‾ ‾ ‾ ‾ ‾ ‾ ‾ ‾ ‾ ‾ ‾ ‾ ${NONE}"
-
-  cd "/Users/$CURRENT_USER/swtor_tmp/" || exit
-  download_crossover_21_patched
-  unpack_crossover_21_tar
-  compile_llvm
-  compile_clang
-  compile_wine
+  install_package_wget
+  tap_into_gcenx_brew
+  install_package_wine_stable
   check_if_wine_installed
+  install_package_winetricks
+
+  # echo -e "${PURPLE}\tStep 3: Download and compile patched Wine CrossOver 21${NONE}"
+  # echo -e "${PURPLE}\t‾ ‾ ‾ ‾ ‾ ‾ ‾ ‾ ‾ ‾ ‾ ‾ ‾ ‾ ‾ ‾ ‾ ${NONE}"
+
+  # cd "/Users/$CURRENT_USER/swtor_tmp/" || exit
+  # download_crossover_21_patched
+  # unpack_crossover_21_tar
+  # compile_llvm
+  # compile_clang
+  # compile_wine
+  # check_if_wine_installed
 
   echo -e "${PURPLE}\tStep 4: Create custom Wine prefix${NONE}"
   echo -e "${PURPLE}\t‾ ‾ ‾ ‾ ‾ ‾ ‾ ‾ ‾ ‾ ‾ ‾ ‾ ‾ ‾ ‾ ‾ ${NONE}"
@@ -395,7 +401,7 @@ install_post_catalina() {
   echo -e "${PURPLE}\tStep 5: Install DLLs to prefix${NONE}"
   echo -e "${PURPLE}\t‾ ‾ ‾ ‾ ‾ ‾ ‾ ‾ ‾ ‾ ‾ ‾ ‾ ‾ ‾ ${NONE}"
 
-  export WINE=wine32on64 # required to fool winetricks into using wine32on64
+  # export WINE=wine32on64 # required to fool winetricks into using wine32on64
   install_dll_vcrun2008
   install_dll_crypt32
   install_dll_d3dx9_36
