@@ -22,7 +22,7 @@ create_skeleton_app() {
   log "->\tCreating skeleton SWTOR.app"
   mkdir -vp "$APP_DIR"/Contents/{MacOS,Resources}
 
-  cp -v "$TEMPLATE_DIR/Info.plist" "$APP_DIR/"
+  cp -v "$TEMPLATE_DIR/Info.plist" "$APP_DIR/Contents/"
   cp -v "$TEMPLATE_DIR/SWTOR.icns" "$APP_DIR/Contents/Resources/"
   cp -v "$TEMPLATE_DIR/SWTOR.sh" "$APP_DIR/Contents/MacOS/SWTOR"
 }
