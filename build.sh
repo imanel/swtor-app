@@ -78,8 +78,7 @@ launch_swtor() {
   WINEPREFIX="$PREFIX_DIR" wine "$PREFIX_DIR/drive_c/Program Files/SWTOR_setup.exe" >/dev/null 2>&1
 }
 
-# Main function that installs Homebrew packages and SWTOR
-install() {
+build() {
 
   echo -e "${PURPLE}\tStep 1: Install Homebrew packages${NONE}"
   echo -e "${PURPLE}\t‾ ‾ ‾ ‾ ‾ ‾ ‾ ‾ ‾ ‾ ‾ ‾ ‾ ‾ ‾ ‾ ‾ ${NONE}"
@@ -123,5 +122,5 @@ install() {
 if [[ $(command -v brew) == "" ]]; then
   echo -e "${RED}\tERROR: Homebrew not installed. Exiting.${NONE}"
 else
-  install
+  build
 fi
