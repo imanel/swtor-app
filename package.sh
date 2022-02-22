@@ -38,7 +38,6 @@ compress_app() {
   tar -cvzf "$DIST_DIR/$file_name" -C "$DIST_DIR" --gid 0 --uid 0 "SWTOR.app"
 }
 
-
 move_back_prefix_dir() {
   log "->\tMoving prefix dir back to original place"
   mv -v "$APP_DIR/Contents/Resources/prefix" "$PREFIX_DIR"
