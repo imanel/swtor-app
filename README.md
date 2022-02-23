@@ -37,6 +37,14 @@ full game (or future update), it should start updating automatically soon.
 Please create [an issue](https://github.com/imanel/swtor-app/issues) and provide your Mac model, macOS version,
 and content of `~/Library/Logs/SWTOR.log` file.
 
+**After pressing "play" it takes ages to load game for the first time**
+
+This might be the result of SWTOR enabling ultra quality and the highest possible resolution. It might take a while,
+but as long as you can see spinner it will finally load. You can also press CMD+TAB to minimize the application,
+and wait couple minutes while doing something else - it will keep loading in the background, and the next time
+you will bring it back to front it should load correctly. After adjusting graphic settings it should boot pretty
+much instantly the next time.
+
 **What is lite version?**
 
 SWTOR-standalone is all-in-one package with no dependencies, including [Wine Crossover](https://github.com/Gcenx/homebrew-wine).
