@@ -1,8 +1,8 @@
 # Changelog
 
-## Next
+## 1.0.2
 
-- prepare only standalone version
+- cleanup and better packaging
 
 ## 1.0.1
 
