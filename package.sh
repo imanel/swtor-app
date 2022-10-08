@@ -33,9 +33,9 @@ move_prefix_to_app() {
 }
 
 compress_app() {
-  local file_name="SWTOR.tar.gz"
+  local file_name="SWTOR.dmg"
   log "->\Compressing SWTOR.app as $file_name"
-  tar -cvzf "$DIST_DIR/$file_name" -C "$DIST_DIR" --gid 0 --uid 0 "SWTOR.app"
+  create-dmg --app-drop-link 580 110 --window-size 710 300 --icon SWTOR.app 125 110 --background "$TEMPLATE_DIR/background.png" "$DIST_DIR/$file_name" "SWTOR.app"
 }
 
 copy_wine_to_app() {

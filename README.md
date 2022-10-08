@@ -4,8 +4,8 @@ Star Wars: The Old Republic app for macOS, working out of the box.
 
 ## How to install?
 
-1. Download SWTOR.tar.gz from the [latest release](https://github.com/imanel/swtor-app/releases)
-2. Decompress it (if you're using Safari it may do it for you)
+1. Download SWTOR.dmg from the [latest release](https://github.com/imanel/swtor-app/releases)
+2. Open it
 3. Move SWTOR.app to /Applications folder
 4. Run like any other app
 
