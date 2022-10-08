@@ -4,7 +4,7 @@ Star Wars: The Old Republic app for macOS, working out of the box.
 
 ## How to install?
 
-1. Download SWTOR-standalone.tar.gz from the [latest release](https://github.com/imanel/swtor-app/releases)
+1. Download SWTOR.tar.gz from the [latest release](https://github.com/imanel/swtor-app/releases)
 2. Decompress it (if you're using Safari it may do it for you)
 3. Move SWTOR.app to /Applications folder
 4. Run like any other app
@@ -45,22 +45,13 @@ and wait couple minutes while doing something else - it will keep loading in the
 you will bring it back to front it should load correctly. After adjusting graphic settings it should boot pretty
 much instantly the next time.
 
-**What is light version?**
-
-SWTOR-standalone is all-in-one package with no dependencies, including [Wine Crossover](https://github.com/Gcenx/homebrew-wine).
-If you want to install you own version of Wine then SWTOR-light is for you - no Wine inside and it will pick up any
-version that is installed via homebrew and available via `/opt/homebrew/bin/wine`.
-Please note that due to changes in macOS since Catalina win32 versions of binaries are not supported, which mean that
-standard Wine (including wine-7.0) will not work - you need to use Crossover version, i.e one that is bundled with
-standalone package version.
-
 ## How to build it by myself?
 
 1. Make sure that you have homebrew installed
 2. Check that you don't have any other Wine version installed (we're using [wine-crossover](https://github.com/Gcenx/homebrew-wine))
 3. Run `./build.sh` to create Wine Prefix in `prefix` folder
 4. Run `./package.sh` to create SWTOR.app and package it
-5. You can find both light and standalone version in `dist` folder
+5. You can find package in `dist` folder
 
 ## Acknowledgment
 

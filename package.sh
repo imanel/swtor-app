@@ -33,7 +33,7 @@ move_prefix_to_app() {
 }
 
 compress_app() {
-  local file_name="$1.tar.gz"
+  local file_name="SWTOR.tar.gz"
   log "->\Compressing SWTOR.app as $file_name"
   tar -cvzf "$DIST_DIR/$file_name" -C "$DIST_DIR" --gid 0 --uid 0 "SWTOR.app"
 }
@@ -68,18 +68,12 @@ package() {
   create_skeleton_app
   move_prefix_to_app
 
-  log "_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _"
-  log "Step 3: Prepare SWTOR-light package"
-  log "‾ ‾ ‾ ‾ ‾ ‾ ‾ ‾ ‾ ‾ ‾ ‾ ‾ ‾ ‾ ‾ ‾ ‾"
-
-  compress_app "SWTOR-light"
-
   log "_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _"
-  log "Step 4: Prepare SWTOR-standalone package"
+  log "Step 3: Prepare SWTOR package"
   log "‾ ‾ ‾ ‾ ‾ ‾ ‾ ‾ ‾ ‾ ‾ ‾ ‾ ‾ ‾ ‾ ‾ ‾ ‾ ‾ ‾"
 
   copy_wine_to_app
-  compress_app "SWTOR-standalone"
+  compress_app
 
   log "_ _ _ _ _ _ _ _"
   log "Step 9: Cleanup"

@@ -1,5 +1,9 @@
 # Changelog
 
+## Next
+
+- prepare only standalone version
+
 ## 1.0.1
 
 - fix for Intel-based Macs using SWTOR-light version (no impact on SWTOR-standalone)
