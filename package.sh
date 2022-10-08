@@ -5,6 +5,7 @@ set -e
 SCRIPT_DIR=$(cd "$(dirname "${BASH_SOURCE[0]}")" &> /dev/null && pwd)
 DIST_DIR="$SCRIPT_DIR/dist"
 APP_DIR="$DIST_DIR/SWTOR.app"
+PACKAGE_DIR="$DIST_DIR/SWTOR.dmg"
 PREFIX_DIR="$SCRIPT_DIR/prefix"
 TEMPLATE_DIR="$SCRIPT_DIR/template"
 
@@ -33,9 +34,8 @@ move_prefix_to_app() {
 }
 
 compress_app() {
-  local file_name="SWTOR.dmg"
-  log "->\Compressing SWTOR.app as $file_name"
-  create-dmg --app-drop-link 580 110 --window-size 710 300 --icon SWTOR.app 125 110 --background "$TEMPLATE_DIR/background.png" "$DIST_DIR/$file_name" "SWTOR.app"
+  log "->\Compressing SWTOR.app as SWTOR.dmg"
+  create-dmg --app-drop-link 580 110 --window-size 710 300 --icon SWTOR.app 120 110 --background "$TEMPLATE_DIR/background.png" $PACKAGE_DIR $APP_DIR
 }
 
 copy_wine_to_app() {
