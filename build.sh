@@ -35,7 +35,7 @@ install_package_winetricks() {
 create_swtor_prefix() {
   log "(1/1) Creating Wine prefix"
   rm -rf "$PREFIX_DIR"
-  WINEARCH=win32 WINEPREFIX="$PREFIX_DIR" wine wineboot
+  WINEPREFIX="$PREFIX_DIR" wine wineboot
 }
 
 install_dll_vcrun2008() {

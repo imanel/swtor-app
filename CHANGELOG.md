@@ -1,5 +1,9 @@
 # Changelog
 
+## Latest
+
+- switch to Crossover Wine 22 style
+
 ## 1.0.2
 
 - cleanup and better packaging
