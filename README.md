@@ -1,5 +1,7 @@
 # SWTOR.app
 
+**IMPORTANT: SWTOR is now available natively for Mac, you can [download it](https://www.swtor.com/game/download) from official site. As such this project is no longer needed and will be archived. Thanks everyone for your past support.**
+
 Star Wars: The Old Republic app for macOS, working out of the box.
 
 ## How to install?
